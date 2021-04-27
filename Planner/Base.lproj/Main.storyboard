@@ -37,7 +37,7 @@
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lsc-SI-Pz7">
-                                                    <rect key="frame" x="79" y="56" width="192" height="21"/>
+                                                    <rect key="frame" x="108" y="56" width="163" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -50,29 +50,82 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="txE-5t-shB">
+                                                    <rect key="frame" x="79" y="56" width="21" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="button" destination="Gy7-fd-cye" id="8SC-KE-oWf"/>
+                                            <outlet property="countLabel" destination="txE-5t-shB" id="tsa-3z-zvG"/>
                                             <outlet property="dateLabel" destination="8r5-GS-o3y" id="2l7-5C-ZzY"/>
                                             <outlet property="missionLabel" destination="lsc-SI-Pz7" id="PpU-FW-JcL"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pdt-W1-OeZ">
+                                <rect key="frame" x="20" y="128" width="374" height="280"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="000" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="WH2-rF-gYJ">
+                                        <rect key="frame" x="58" y="24" width="275" height="142"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                        <color key="textColor" systemColor="labelColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0kN-rq-T4o">
+                                        <rect key="frame" x="256" y="212" width="80" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemYellowColor"/>
+                                        <state key="normal" title="Accomplish"/>
+                                        <connections>
+                                            <action selector="accomplishButtonTapped:" destination="Yaz-ad-peT" eventType="touchUpInside" id="Q33-Kc-dKK"/>
+                                        </connections>
+                                    </button>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="X9Z-uh-62M">
+                                        <rect key="frame" x="8" y="200" width="228" height="42"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    </datePicker>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="280" id="96w-I7-UW8"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="JXV-K7-YB9">
+                                <rect key="frame" x="334" y="749" width="68" height="46"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <state key="normal" title="Add"/>
+                                <connections>
+                                    <action selector="addButtonTapped:" destination="Yaz-ad-peT" eventType="touchUpInside" id="hgf-Z4-ckV"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="moz-Oc-kBd"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="moz-Oc-kBd" firstAttribute="bottom" secondItem="PeE-Bq-JoP" secondAttribute="bottom" id="Bbk-eL-zlD"/>
                             <constraint firstItem="PeE-Bq-JoP" firstAttribute="leading" secondItem="moz-Oc-kBd" secondAttribute="leading" id="aK7-Ot-C6c"/>
+                            <constraint firstItem="pdt-W1-OeZ" firstAttribute="top" secondItem="moz-Oc-kBd" secondAttribute="top" constant="40" id="bxA-Ym-Mc6"/>
+                            <constraint firstItem="pdt-W1-OeZ" firstAttribute="leading" secondItem="moz-Oc-kBd" secondAttribute="leading" constant="20" id="kL1-h8-vi0"/>
                             <constraint firstItem="moz-Oc-kBd" firstAttribute="trailing" secondItem="PeE-Bq-JoP" secondAttribute="trailing" id="lvP-Iz-HOn"/>
+                            <constraint firstItem="moz-Oc-kBd" firstAttribute="trailing" secondItem="pdt-W1-OeZ" secondAttribute="trailing" constant="20" id="mt5-GA-98U"/>
                             <constraint firstItem="PeE-Bq-JoP" firstAttribute="top" secondItem="moz-Oc-kBd" secondAttribute="top" id="ycs-nu-jKQ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="t2v-uS-hyk"/>
                     <connections>
+                        <outlet property="addView" destination="pdt-W1-OeZ" id="2Y7-2c-NPn"/>
+                        <outlet property="datePicker" destination="X9Z-uh-62M" id="GpO-Of-ohF"/>
                         <outlet property="tableView" destination="PeE-Bq-JoP" id="Dwq-tv-vOS"/>
+                        <outlet property="textView" destination="WH2-rF-gYJ" id="zrM-Qh-c05"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZdM-2C-bSn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -162,8 +215,17 @@
         </scene>
     </scenes>
     <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import CoreData
 
 struct MissionModel {
     var content: String
     var time: Date
     var isAccomplished: Bool
 }
+
