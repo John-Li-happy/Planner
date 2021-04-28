@@ -103,7 +103,34 @@ class TodayViewModel {
         do {
             try managedObjectContext.save()
         } catch { fatalError("error in update") }
-
+    }
+    
+    func updateMission(indexPath: IndexPath, content: String, date: Date) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedObjectContext = appDelegate.persistentContainer.viewContext
+        
+        dataSource[indexPath.section][indexPath.row].date = date
+        dataSource[indexPath.section][indexPath.row].mission = content
+        dataSource[indexPath.section][indexPath.row].accomplished = false
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM dd"
+        let dateString = dateFormatter.string(from: date)
+        let todayString = dateFormatter.string(from: Date())
+        if dateString > todayString {
+            dataSource[2].append(dataSource[indexPath.section][indexPath.row])
+        } else if dateString == todayString {
+            dataSource[1].append(dataSource[indexPath.section][indexPath.row])
+        } else {
+            dataSource[0].append(dataSource[indexPath.section][indexPath.row])
+        }
+        
+        dataSource[indexPath.section].remove(at: indexPath.row)
+        
+        delegate.refreshTableView()
+        do {
+            try managedObjectContext.save()
+        } catch { fatalError("error in update") }
     }
 }
 

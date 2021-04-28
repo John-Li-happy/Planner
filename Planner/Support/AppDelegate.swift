@@ -16,6 +16,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         print("this is \n", urls[urls.count - 1] as URL)
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM dd"
+        let todayString = dateFormatter.string(from: Date())
+        
+        if UserDefaults.standard.object(forKey: "recentDate") == nil { // first come in
+            UserDefaults.standard.setValue(todayString, forKey: "recentDate")
+        } else {
+            if let lastDateString = UserDefaults.standard.object(forKey: "recentDate") as? String {
+                if lastDateString != todayString {
+                    let loadRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CurrentEntity")
+                    let managedObjectContext = persistentContainer.viewContext
+                    let customPersistentContext = CustomStack().customPersistentContainer.viewContext
+                    do {
+                        let allMissions = try managedObjectContext.fetch(loadRequest) as! [CurrentEntity]
+                        for missionIndex in 0..<allMissions.count {
+                            let dateString = dateFormatter.string(from: allMissions[missionIndex].date!)
+                            if dateString < todayString && allMissions[missionIndex].accomplished {
+                                let oldMission = NSEntityDescription.insertNewObject(forEntityName: "PastEntity", into: customPersistentContext) as! PastEntity
+                                oldMission.accomplished = allMissions[missionIndex].accomplished
+                                oldMission.date = allMissions[missionIndex].date
+                                oldMission.mission = allMissions[missionIndex].mission
+                            
+                                try customPersistentContext.save()
+                                
+                                managedObjectContext.delete(allMissions[missionIndex])
+                                try managedObjectContext.save()
+                            }
+                        }
+                    } catch { fatalError("error in transforming") }
+                }
+            }
+        }
         return true
     }
 
@@ -29,26 +61,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-        */
         let container = NSPersistentContainer(name: "CurrentModel")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                 
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
@@ -63,8 +78,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             do {
                 try context.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }

@@ -19,34 +19,68 @@ class TodayViewController: UIViewController {
     @IBOutlet private weak var datePicker: UIDatePicker!{
         didSet {
             datePicker.datePickerMode = .date
-            datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
         }
     }
     @IBOutlet private weak var addView: UIView!
-    @IBOutlet private weak var textView: UITextView!
+    @IBOutlet private weak var textView: UITextView! {
+        didSet {
+            textView.delegate = self
+        }
+    }
     
     lazy var viewModel = TodayViewModel(delegate: self)
-    var chosenDate = Date()
+    var goingToAddFlag = Bool()
+    var chosnCell = IndexPath()
+    var tapRecognizer = UITapGestureRecognizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()        
         viewModel.loadMissions()
+        tapToResign()
     }
+    
     @IBAction func addButtonTapped(_ sender: UIButton) {
         addView.isHidden = false
+        goingToAddFlag = true
+        datePicker.date = Date()
+        tapRecognizer.cancelsTouchesInView = true
     }
     
     @IBAction func accomplishButtonTapped(_ sender: UIButton) {
-        if !textView.text.isEmpty && textView.text != nil {
-            viewModel.createNewMission(content: textView.text, time: chosenDate)
+        if goingToAddFlag {
+            if !textView.text.isEmpty && textView.text != nil {
+                viewModel.createNewMission(content: textView.text, time: datePicker.date)
+            } else {
+                noDataAlert()
+            }
         } else {
-            // show alert
+            if !textView.text.isEmpty && textView.text != nil {
+                viewModel.updateMission(indexPath: chosnCell, content: textView.text, date: datePicker.date)
+            } else {
+                noDataAlert()
+            }
         }
         addView.isHidden = true
+        tapRecognizer.cancelsTouchesInView = false
     }
     
-    @objc func datePickerValueChanged(sender: UIDatePicker) {
-        chosenDate = sender.date
+    private func tapToResign() {
+        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapHandler))
+        tapRecognizer.cancelsTouchesInView = false
+        tableView.addGestureRecognizer(tapRecognizer)
+    }
+    
+    private func noDataAlert() {
+        let alertController = UIAlertController(title: "Attention", message: "Please re-enter ", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc func tapHandler() {
+        addView.isHidden = true
+        tapRecognizer.cancelsTouchesInView = false
+        textView.resignFirstResponder()
+        view.endEditing(true)
     }
 }
 
@@ -86,6 +120,13 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        goingToAddFlag = false
+        tapRecognizer.cancelsTouchesInView = true
+        chosnCell = indexPath
+        
+        addView.isHidden = false
+        textView.text = viewModel.singleMission(section: indexPath.section, index: indexPath.row).content
+        datePicker.date = viewModel.singleMission(section: indexPath.section, index: indexPath.row).time
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -100,6 +141,18 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
             self.viewModel.accomplishMission(indexPath: indexPath)
         }
         return UISwipeActionsConfiguration(actions: [accomplishSwipe])
+    }
+}
+
+extension TodayViewController: UITextViewDelegate {
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+//        textView.becomeFirstResponder()
+        return true
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        textView.resignFirstResponder()
+        view.endEditing(true)
     }
 }
 
