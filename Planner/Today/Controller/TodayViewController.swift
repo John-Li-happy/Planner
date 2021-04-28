@@ -96,18 +96,18 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
-            return "Overdue"
+            return AppConstants.TableHeaders.overdue
         case 1:
-            return "Today"
+            return AppConstants.TableHeaders.today
         case 2:
-            return "Upcoming"
+            return AppConstants.TableHeaders.upcoming
         default:
             return "non"
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "TodayTableViewCell") as? TodayTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: AppConstants.Table.cellIdentifier) as? TodayTableViewCell else { return UITableViewCell() }
         let singleMission = viewModel.singleMission(section: indexPath.section, index: indexPath.row)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd"
@@ -130,14 +130,14 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteSwipe = UIContextualAction(style: .normal, title: "Delete") { (action, view, handler) in
+        let deleteSwipe = UIContextualAction(style: .normal, title: AppConstants.Table.deleteSwipe) { (action, view, handler) in
             self.viewModel.deleteMission(indexPath: indexPath)
         }
         return UISwipeActionsConfiguration(actions: [deleteSwipe])
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let accomplishSwipe = UIContextualAction(style: .normal, title: "Accomplish") { (action, view, handler) in
+        let accomplishSwipe = UIContextualAction(style: .normal, title: AppConstants.Table.accomplishSwipe) { (action, view, handler) in
             self.viewModel.accomplishMission(indexPath: indexPath)
         }
         return UISwipeActionsConfiguration(actions: [accomplishSwipe])
@@ -146,7 +146,6 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension TodayViewController: UITextViewDelegate {
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-//        textView.becomeFirstResponder()
         return true
     }
     

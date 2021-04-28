@@ -10,7 +10,7 @@ import CoreData
 
 class CustomStack {
     let customPersistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "PastModel")
+        let container = NSPersistentContainer(name: AppConstants.CoreDataConstants.pastModelName)
         container.loadPersistentStores { (storeDescription, error) in
             if let error = error
             {

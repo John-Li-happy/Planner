@@ -34,7 +34,7 @@ class TodayViewModel {
     }
     
     func loadMissions() {
-        let loadRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CurrentEntity")
+        let loadRequest = NSFetchRequest<NSFetchRequestResult>(entityName: AppConstants.CoreDataConstants.currentEntityName)
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedObjectContext = appDelegate.persistentContainer.viewContext
 
@@ -61,7 +61,7 @@ class TodayViewModel {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedObjectContext = appDelegate.persistentContainer.viewContext
         
-        let newMission = NSEntityDescription.insertNewObject(forEntityName: "CurrentEntity", into: managedObjectContext) as! CurrentEntity
+        let newMission = NSEntityDescription.insertNewObject(forEntityName: AppConstants.CoreDataConstants.currentEntityName, into: managedObjectContext) as! CurrentEntity
         newMission.accomplished = false
         newMission.date = time
         newMission.mission = content

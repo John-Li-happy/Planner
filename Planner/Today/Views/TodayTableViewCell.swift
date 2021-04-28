@@ -26,9 +26,13 @@ class TodayTableViewCell: UITableViewCell {
     }
     
     func configureCell(mission: String, date: String, isAccomplished: Bool) {
-        missionLabel.text = mission
+        let crossedMission = NSMutableAttributedString.init(string: mission)
+        crossedMission.addAttributes([NSAttributedString.Key.strikethroughStyle: 1], range: NSRange(location: 0, length: crossedMission.length))
+        
+        missionLabel.attributedText = crossedMission
         dateLabel.text = date
         button.backgroundColor = isAccomplished ? .green : .red
+        self.contentView.backgroundColor = isAccomplished ? .green : .red
         countLabel.text = cellIndexPath.isEmpty ? "0" : String(cellIndexPath.row + 1)
         cellIsAccomplished = isAccomplished
     }
@@ -36,6 +40,7 @@ class TodayTableViewCell: UITableViewCell {
     @objc private func accomplishMission() {
         cellIsAccomplished = !cellIsAccomplished
         button.backgroundColor = cellIsAccomplished ? .green : .red
+        self.contentView.backgroundColor = cellIsAccomplished ? .green : .red
         delegate?.accomplishedButtonTapping(indexPath: cellIndexPath)
     }
 }
