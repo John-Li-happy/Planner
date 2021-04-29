@@ -17,30 +17,44 @@ class TodayTableViewCell: UITableViewCell {
     @IBOutlet private weak var button: UIButton!
     @IBOutlet private weak var countLabel: UILabel!
     
-    var cellIsAccomplished = Bool()
+    private var cellIsAccomplished = Bool()
+    private var missionString = String()
     var cellIndexPath = IndexPath()
     var delegate: TodayCellBackwards?
         
     @IBAction func accomplishedButtomTapped(_ sender: UIButton) {
-        accomplishMission()
+        if cellIsAccomplished {
+            missionLabel.attributedText = nil
+            missionLabel.text = missionString
+
+            button.setImage(UIImage(systemName: "circle"), for: .normal)
+        } else {
+            let crossedMission = NSMutableAttributedString.init(string:  missionString)
+            crossedMission.addAttributes([NSAttributedString.Key.strikethroughStyle: 1], range: NSRange(location: 0, length: crossedMission.length))
+            missionLabel.text = nil
+            missionLabel.attributedText = crossedMission
+
+            button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+        }
+
+        cellIsAccomplished = !cellIsAccomplished
+        delegate?.accomplishedButtonTapping(indexPath: cellIndexPath)
     }
     
     func configureCell(mission: String, date: String, isAccomplished: Bool) {
-        let crossedMission = NSMutableAttributedString.init(string: mission)
-        crossedMission.addAttributes([NSAttributedString.Key.strikethroughStyle: 1], range: NSRange(location: 0, length: crossedMission.length))
-        
-        missionLabel.attributedText = crossedMission
-        dateLabel.text = date
-        button.backgroundColor = isAccomplished ? .green : .red
-        self.contentView.backgroundColor = isAccomplished ? .green : .red
-        countLabel.text = cellIndexPath.isEmpty ? "0" : String(cellIndexPath.row + 1)
         cellIsAccomplished = isAccomplished
-    }
-    
-    @objc private func accomplishMission() {
-        cellIsAccomplished = !cellIsAccomplished
-        button.backgroundColor = cellIsAccomplished ? .green : .red
-        self.contentView.backgroundColor = cellIsAccomplished ? .green : .red
-        delegate?.accomplishedButtonTapping(indexPath: cellIndexPath)
+        missionString = mission
+        
+        if cellIsAccomplished {
+            let crossedMission = NSMutableAttributedString.init(string: mission)
+            crossedMission.addAttributes([NSAttributedString.Key.strikethroughStyle: 1], range: NSRange(location: 0, length: crossedMission.length))
+            missionLabel.attributedText = crossedMission
+            button.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+        } else {
+            missionLabel.text = mission
+            button.setImage(UIImage(systemName: "circle"), for: .normal)
+        }
+        dateLabel.text = date
+        countLabel.text = cellIndexPath.isEmpty ? "0" : String(cellIndexPath.row + 1)
     }
 }

@@ -15,7 +15,7 @@ enum AppConstants {
     }
     
     enum TableHeaders {
-        static let overdue = "Overdue"
+        static let overdue = "Overdued"
         
         static let today = "Today"
         

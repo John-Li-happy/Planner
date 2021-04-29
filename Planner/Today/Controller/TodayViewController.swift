@@ -13,7 +13,7 @@ class TodayViewController: UIViewController {
         didSet {
             tableView.delegate = self
             tableView.dataSource = self
-            tableView.rowHeight = 150
+            tableView.tableFooterView = UIView()
         }
     }
     @IBOutlet private weak var datePicker: UIDatePicker!{
@@ -21,7 +21,13 @@ class TodayViewController: UIViewController {
             datePicker.datePickerMode = .date
         }
     }
-    @IBOutlet private weak var addView: UIView!
+    @IBOutlet private weak var addView: UIView! {
+        didSet {
+            addView.layer.borderWidth = 5
+            addView.layer.borderColor = UIColor.white.cgColor
+            addView.layer.cornerRadius = 15
+        }
+    }
     @IBOutlet private weak var textView: UITextView! {
         didSet {
             textView.delegate = self
@@ -32,6 +38,14 @@ class TodayViewController: UIViewController {
     var goingToAddFlag = Bool()
     var chosnCell = IndexPath()
     var tapRecognizer = UITapGestureRecognizer()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.estimatedRowHeight = 60.0
+        tableView.rowHeight = UITableView.automaticDimension
+
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()        
